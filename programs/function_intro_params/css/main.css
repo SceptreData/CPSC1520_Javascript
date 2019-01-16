@@ -1,0 +1,14 @@
+body {
+	font-family: sans-serif;
+	font-size: 100%;
+}
+
+main {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: linear-gradient(lightblue, rgb(241, 241, 241));
+	height: 5rem;
+	font-size: 2rem;
+}
+
