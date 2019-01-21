@@ -12,7 +12,6 @@ function strong(val){
     return "<strong>" + val + "</strong>";
 }
 
-sup(10);
 
 updateHTML(".intro", "Wowza!");
 
@@ -21,3 +20,5 @@ console.log(importantPar);
 
 var strongPar = strong(importantPar);
 updateHTML(".important", strongPar);
+
+document.querySelector(".important").innerHTML 
