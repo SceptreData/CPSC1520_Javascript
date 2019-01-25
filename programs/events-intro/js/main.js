@@ -9,6 +9,8 @@ function displayHidden(){
 // 3. add event listener
 img.addEventListener('click', displayHidden);
 
+// FOR FUN
+// David's cool transparency slider
 let slider = document.querySelector("#my-range");
 let output = document.querySelector('.value');
 
