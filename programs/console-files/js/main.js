@@ -25,4 +25,7 @@ console.log("My name is " + firstName)
 /* Modifying Elements
 ----------------------- */
 var intro = document.querySelector(".intro");
-intro.innerHTML = "He's <b>pretty</b> proud of it.";
+intro.innerHTML = "It's <b>pretty</b> sweet.";
+
+var title = document.querySelector("title");
+title.innerHTML = "David's Neat Website";
