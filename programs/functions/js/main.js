@@ -14,6 +14,7 @@ var importantPar = document.querySelector(".important").innerHTML;
 console.log(importantPar);
 
 var strongPar = strong(importantPar);
+<<<<<<< HEAD
 updateInnerHTML(".important", strongPar);
 
 /*
@@ -52,3 +53,8 @@ updateItalic(".note");
 //     console.log("Goodbye Events!");
 //     button.removeEventListener("click", once)
 // }
+=======
+updateHTML(".important", strongPar);
+
+document.querySelector(".important").innerHTML 
+>>>>>>> 554b85dda97bdb56c503970a102453cc7a69319d
