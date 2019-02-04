@@ -5,11 +5,14 @@
     david.f.bergeron@gmail.com
     ------------------------------*/
 
-let memeFiles = [
+const placeHolder = document.querySelector('img').src;
+const memeFiles = [
     "fry-meme.png",
     "one-does-not-simply-meme.png",
     "most-interesting-man-meme.png"
 ];
+
+console.log(placeHolder);
 
 const imgElt = document.querySelector('.meme-display img');
 const topText = document.querySelector('.top-text');
@@ -17,19 +20,20 @@ const bottomText = document.querySelector('.bottom-text');
 
 const theForm = document.querySelector('.meme-form');
 
-function getMeme(idx){
-    return 'img/' + memeFiles[idx];
+function getMemePath(idx){
+    return 'img/' + memeFiles[idx - 1];
 }
 
- imgElt.src = getMeme(2);
-// setTopText("Hello!");
-// setBottomText("This is not a test.");
-// Set top text from form
-
-// Get bottom text from form
-
 function setImage(memeIdx){
-    imgElt.src = getMeme(memeIdx);
+    if (memeIdx > 0){
+        imgElt.src = getMemePath(memeIdx);
+    } else {
+        imgElt.src = placeHolder;
+    }
+}
+
+function isEmptyOrWhiteSpace(str){
+    return !str || !str.trim();
 }
 
 function setTopText(str){
@@ -40,9 +44,22 @@ function setBottomText(str){
     bottomText.innerHTML = str;
 }
 theForm.addEventListener('submit', event=> {
-    console.log(theForm.elements[1].selectedIndex);
-    console.log(theForm.elements[0].value);
+    let memeIdx = theForm.elements[0].selectedIndex;
+    setImage(memeIdx);
+
+    let topStr = theForm.elements[1].value;
+    let botStr = theForm.elements[2].value;
+
+    if (isEmptyOrWhiteSpace(topStr)) {
+        Error("Type stuff dumbass");
+    }
     setTopText(theForm.elements[1].value);
     setBottomText(theForm.elements[2].value);
     event.preventDefault();
+});
+
+theForm.addEventListener('reset', event=>{
+    setImage(0);
+    setTopText('');
+    setBottomText('');
 });
