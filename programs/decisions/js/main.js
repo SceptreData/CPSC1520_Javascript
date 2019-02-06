@@ -1,16 +1,16 @@
 let featureLink = document.querySelector('a.feature');
-featureImage = document.querySelector('img.feature');
+let featureImage = document.querySelector('img.feature');
+
+var current = "View Barcelona";
+var next = "Hide Barcelona";
 
 function featureLinkHandler(evt) {
-    if (featureLink.innerHTML === "View Barcelona") {
         featureImage.src = featureLink.href;
-        featureImage.classList.remove('hidden');
-        featureLink.innerHTML = "Hide Barcelona";
-    } else {
-        featureImage.src = '';
-        featureImage.classList.add('hidden');
-        featureLink.innerHTML = "View Barcelona";
-    }
-    evt.preventDefault();
+        featureImage.classList.toggle('hidden');
+        featureLink.innerHTML = next;
+
+        // Swap value of current and Next.
+        [current, next] = [next, current];
+        evt.preventDefault();
 }
 featureLink.addEventListener('click', featureLinkHandler);

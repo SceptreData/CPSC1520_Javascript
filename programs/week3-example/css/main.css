@@ -1,0 +1,56 @@
+body {
+	font-family: 'Nunito', sans-serif;
+	width: 960px;
+	margin: 0 auto;
+	text-align: center;
+	line-height: 1.5;
+}
+
+header {
+	text-align: left;
+}
+
+.feature.description {
+	font-style: italic;
+}
+
+.feature-display {
+	padding: 1rem;
+	margin: 0 auto;
+	width: 700px;
+	background: lightsteelblue;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	border-radius: 10px;
+	box-shadow: 0px 5px 5px rgb(95, 93, 93);
+}
+
+
+.feature-display img {
+	border-radius: 15px;
+}
+
+.hidden {
+	display: none;
+}
+
+.click-counter {
+	font-weight: 700;
+	font-size: 32px;
+	text-align: center;
+	margin: 0;
+}
+
+.clicker-zone{
+	display: flex;
+	justify-content: center;
+}
+
+.clicker-zone p {
+	margin-top: .5rem;
+}
+
+footer p {
+	text-align: left;
+}
