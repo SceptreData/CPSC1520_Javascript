@@ -21,9 +21,8 @@ selectAll.addEventListener('change', e=>{
 });
 
 form.addEventListener('submit',function(e) {
-    e.preventDefault();
-    console.log(input.value);
 
+    e.preventDefault();
     let searchVal = input.value.toUpperCase();
 
     for (let i = 1; i < contentList.length; i += 2){
