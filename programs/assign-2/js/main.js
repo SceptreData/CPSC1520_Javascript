@@ -9,11 +9,6 @@ let images = document.querySelectorAll('.thumb-display');
 let tagList = document.querySelectorAll('.tags');
 
 
-function isEmptyOrWhiteSpace(str) {
-    return !str || !str.trim();
-}
-
-
 input.addEventListener('input', ()=> {
     if (isEmptyOrWhiteSpace(input.value)){
         reset.classList.add('hidden');
@@ -40,3 +35,8 @@ reset.addEventListener('click', ()=> {
         img.classList.remove('hidden');
     }
 });
+
+
+function isEmptyOrWhiteSpace(str) {
+    return !str || !str.trim();
+}
