@@ -123,5 +123,14 @@ let imgAutoScroll = setInterval(()=> {
 	fadeOutSlide(+1);
 }, 4000);
 
+targetImage.addEventListener('mouseenter',()=>{
+	clearInterval(imgAutoScroll);
+});
+
+targetImage.addEventListener('mouseleave', ()=> {
+	imgAutoScroll = setInterval(()=>{
+		fadeOutSlide(+1);
+	}, 4000);
+});
 
 // TODO: Clear Timeout (add cancel timeout.)
