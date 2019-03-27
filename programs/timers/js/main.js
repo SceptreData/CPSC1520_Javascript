@@ -133,4 +133,5 @@ function timer(){
     timerTimeout = setInterval(()=> {
         console.log('booya');
     }, 1000);
+    console.log(typeof(timerTimeout));
 }
