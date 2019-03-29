@@ -36,16 +36,20 @@ document.querySelector('.todo-frm').addEventListener('submit', function (evt) {
 
 	let up = document.createTextNode('\u21e7');
 	let dn = document.createTextNode('\u21e9');
+	let right = document.createTextNode('\u21e8')
 
 	// Create Arrows
 	let upArrow = document.createElement('span');
 	let downArrow = document.createElement('span');
+	let rightArrow = document.createElement('span');
 
 	upArrow.classList.add('arrow', 'up');
 	downArrow.classList.add('arrow', 'dn');
+	rightArrow.classList.add('arrow', 'trash');
 
-	upArrow.appendChild(up);
 	downArrow.appendChild(dn);
+	rightArrow.appendChild(right);
+	upArrow.appendChild(up);
 
 	// set appropriate attributes
 	checkbox.setAttribute('type', 'checkbox');
@@ -57,8 +61,9 @@ document.querySelector('.todo-frm').addEventListener('submit', function (evt) {
 	label.appendChild(labelText);
 	div.appendChild(checkbox);
 	div.appendChild(label);
-	div.appendChild(upArrow);
+	div.appendChild(rightArrow);
 	div.appendChild(downArrow);
+	div.appendChild(upArrow);
 
 	// add the document fragment to the document for rendering
 	todos.appendChild(div);
@@ -84,5 +89,12 @@ todos.addEventListener('click', e => {
 			siblingTodo = targetTodo.previousElementSibling;
 			todoList.insertBefore(targetTodo, siblingTodo);
 		}
+		else if (e.target.classList.contains('trash')){
+			let isGarbage = confirm('Delete this item?');
+			if (isGarbage) {
+				targetTodo.remove();
+			}
+		}
 	}
-});
+	}
+);
