@@ -25,6 +25,7 @@ theForm.addEventListener('submit', event =>  {
     console.log(desc);
     let cashVal = getCashValue();
 
+    let trashIcon = buildTrashIcon();
         
     if (!isErrors()){
         let newRow = document.createElement('tr');
@@ -32,15 +33,18 @@ theForm.addEventListener('submit', event =>  {
         let descElt = buildTableData(desc);
         let typeElt = buildTableData(type);
         let cashElt = buildTableData("$" + cashVal);
+        cashElt.classList.add('transaction-value-itm', type);
 
         console.log('DOING IT');
         newRow.classList.add(type);
         newRow.appendChild(descElt);
         newRow.appendChild(typeElt);
         newRow.appendChild(cashElt);
+        newRow.appendChild(trashIcon);
 
         tableBody.appendChild(newRow);
     }
+    theForm.reset();
 });
 
 function buildTableData(str){
@@ -75,6 +79,14 @@ function getCashValue(){
     }
     return Number(cash.value).toFixed(2);
 }
+
+
+function buildTrashIcon(){
+    let icon = document.createElement('i');
+    icon.classList.add('delete', 'fa', 'fa-trash-o');
+    return icon;
+}
+
 
 function logError(msg){
     let err = document.createElement('li');
