@@ -62,6 +62,23 @@ function addTableRow(description, type, cashVal) {
   tableBody.appendChild(newRow);
 }
 
+function removeTableRow(event) {
+  if (confirm("Are you sure you want to delete this entry?")) {
+    const { parentNode: row } = event.target;
+    const cashElt = row.children[2];
+    const cashVal = cleanCashString(cashElt.firstChild.nodeValue);
+
+    const isDebit = row.classList.contains("debit");
+    if (isDebit) {
+      addDebits(-cashVal);
+    } else {
+      addCredits(-cashVal);
+    }
+
+    row.parentNode.removeChild(row);
+  }
+}
+
 function buildTableData(str) {
   const td = document.createElement("td");
   const txtNode = document.createTextNode(str);
@@ -91,7 +108,6 @@ function getDescription() {
 
 function getCashValue() {
   const cash = theForm.elements.currency;
-  console.log(cash);
   if (cash.value < 0) {
     logError("Cash must be a positive number.");
   }
@@ -101,7 +117,7 @@ function getCashValue() {
 
 function addDebits(val) {
   let debits = getTotalDebits();
-  debits += val;
+  debits += Number(val);
   if (debits < 0) {
     debits = 0;
   }
@@ -111,7 +127,7 @@ function addDebits(val) {
 
 function addCredits(val) {
   let credits = getTotalCredits();
-  credits += val;
+  credits += Number(val);
   if (credits < 0) {
     credits = 0;
   }
@@ -144,23 +160,6 @@ function buildTrashIcon() {
   const icon = document.createElement("i");
   icon.classList.add("delete", "fa", "fa-trash-o");
   return icon;
-}
-
-function removeTableRow(event) {
-  if (confirm("Are you sure you want to delete this entry?")) {
-    const { parentNode: row } = event.target;
-    const cashElt = row.children[2];
-    const cashVal = cleanCashString(cashElt.firstChild.nodeValue);
-
-    const isDebit = row.classList.contains("debit");
-    if (isDebit) {
-      addDebits(-cashVal);
-    } else {
-      addCredits(-cashVal);
-    }
-
-    row.parentNode.removeChild(row);
-  }
 }
 
 function buildErrorList() {
