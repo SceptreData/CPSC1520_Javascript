@@ -9,6 +9,13 @@ const errorField = document.querySelector(".error");
 // Build a list for our errors.
 const errorList = buildErrorList();
 
+// Make the page refresh every two minutes.
+const timerDuration = 120000;
+setTimeout(() => {
+  alert("Your page is about to reload!");
+  window.location.reload();
+}, timerDuration);
+
 theForm.addEventListener("submit", event => {
   // Stop the form from reloading on submit.
   event.preventDefault();
@@ -140,18 +147,20 @@ function buildTrashIcon() {
 }
 
 function removeTableRow(event) {
-  const { parentNode: row } = event.target;
-  const cashElt = row.children[2];
-  const cashVal = cleanCashString(cashElt.firstChild.nodeValue);
+  if (confirm("Are you sure you want to delete this entry?")) {
+    const { parentNode: row } = event.target;
+    const cashElt = row.children[2];
+    const cashVal = cleanCashString(cashElt.firstChild.nodeValue);
 
-  const isDebit = row.classList.contains("debit");
-  if (isDebit) {
-    addDebits(-cashVal);
-  } else {
-    addCredits(-cashVal);
+    const isDebit = row.classList.contains("debit");
+    if (isDebit) {
+      addDebits(-cashVal);
+    } else {
+      addCredits(-cashVal);
+    }
+
+    row.parentNode.removeChild(row);
   }
-
-  row.parentNode.removeChild(row);
 }
 
 function buildErrorList() {
@@ -163,8 +172,8 @@ function buildErrorList() {
 }
 
 function logError(msg) {
-  let err = document.createElement("li");
-  let errMsg = document.createTextNode(msg);
+  const err = document.createElement("li");
+  const errMsg = document.createTextNode(msg);
   err.appendChild(errMsg);
   errorList.appendChild(err);
 }
