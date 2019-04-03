@@ -1,111 +1,190 @@
 // Enter JavaScript for the exercise here...
-const theForm = document.querySelector('.frm-transactions');
+const theForm = document.querySelector(".frm-transactions");
 
-const totalDebits = document.querySelector('.debits');
-const totalCredit = document.querySelector('.credits');
-const tableBody = document.querySelector('tbody');
-
-const errorField = document.querySelector('.error');
+const totalDebits = document.querySelector(".debits");
+const totalCredits = document.querySelector(".credits");
+const tableBody = document.querySelector("tbody");
+const errorField = document.querySelector(".error");
 
 // Build a list for our errors.
-let errorList = document.createElement('ul');
-errorList.classList.add('error-list');
-errorField.appendChild(errorList);
+const errorList = buildErrorList();
 
+theForm.addEventListener("submit", event => {
+  // Stop the form from reloading on submit.
+  event.preventDefault();
 
-theForm.addEventListener('submit', event =>  {
-    //Stop the form from reloading the page
-    event.preventDefault();
+  //Clear Error List (to prepare for new ones!)
+  clearErrors();
 
-    //Clear Errors (to prepare for new ones!)
-    clearErrors();
+  // Retrieve values from form.
+  const type = getTransactionType();
+  const desc = getDescription();
+  const cashVal = getCashValue();
 
-    let type =  getTransactionType();
-    let desc = getDescription()
-    console.log(desc);
-    let cashVal = getCashValue();
-
-    let trashIcon = buildTrashIcon();
-        
-    if (!isErrors()){
-        let newRow = document.createElement('tr');
-
-        let descElt = buildTableData(desc);
-        let typeElt = buildTableData(type);
-        let cashElt = buildTableData("$" + cashVal);
-        cashElt.classList.add('transaction-value-itm', type);
-
-        console.log('DOING IT');
-        newRow.classList.add(type);
-        newRow.appendChild(descElt);
-        newRow.appendChild(typeElt);
-        newRow.appendChild(cashElt);
-        newRow.appendChild(trashIcon);
-
-        tableBody.appendChild(newRow);
+  if (isErrorFree()) {
+    // Update our Debit/Credit Totals.
+    if (type === "credit") {
+      addCredits(cashVal);
+    } else {
+      addDebits(cashVal);
     }
+
+    addTableRow(desc, type, cashVal);
     theForm.reset();
+  }
 });
 
-function buildTableData(str){
-    let td = document.createElement('td');
-    let txtNode = document.createTextNode(str)
-    td.appendChild(txtNode);
-    return td;
+function addTableRow(description, type, cashVal) {
+  const newRow = document.createElement("tr");
+
+  const descElt = buildTableData(description);
+  const typeElt = buildTableData(type);
+  const cashElt = buildTableData("$" + cashVal);
+  cashElt.classList.add("transaction-value-itm", type);
+
+  newRow.classList.add(type);
+  newRow.appendChild(descElt);
+  newRow.appendChild(typeElt);
+  newRow.appendChild(cashElt);
+
+  // Build our trash element, give it an event so we can remove table entries.
+  const trashIcon = buildTrashIcon();
+  trashIcon.addEventListener("click", removeTableRow);
+  newRow.appendChild(trashIcon);
+
+  tableBody.appendChild(newRow);
 }
 
-function getTransactionType(){
-    let type = document.querySelector('select[name=type]');
-    if (type.value === '') {
-        logError("User must select transaction type.");
-    }
+function buildTableData(str) {
+  const td = document.createElement("td");
+  const txtNode = document.createTextNode(str);
+  td.appendChild(txtNode);
 
-    return type.value;
+  return td;
 }
 
-function getDescription(){
-    let descInput = document.querySelector('input[name=description]');
-    let desc = descInput.value;
-    if (isEmptyOrWhiteSpace(desc)) {
-        logError("Description field cannot be empty.");
-    }
-    return desc;
+function getTransactionType() {
+  const type = theForm.elements.type;
+  if (type.value === "") {
+    logError("User must select transaction type.");
+  }
+
+  return type.value;
 }
 
-function getCashValue(){
-    let cash = document.querySelector('input[name="currency"]');
-    if (cash.value < 0) {
-        logError('Cash must be a positive number.');
-    }
-    return Number(cash.value).toFixed(2);
+function getDescription() {
+  const descInput = theForm.elements.description;
+  const desc = descInput.value;
+  if (isEmptyOrWhiteSpace(desc)) {
+    logError("Description field cannot be empty.");
+  }
+
+  return desc;
 }
 
+function getCashValue() {
+  const cash = theForm.elements.currency;
+  console.log(cash);
+  if (cash.value < 0) {
+    logError("Cash must be a positive number.");
+  }
 
-function buildTrashIcon(){
-    let icon = document.createElement('i');
-    icon.classList.add('delete', 'fa', 'fa-trash-o');
-    return icon;
+  return Number(cash.value).toFixed(2);
 }
 
+function addDebits(val) {
+  let debits = getTotalDebits();
+  debits += val;
+  if (debits < 0) {
+    debits = 0;
+  }
 
-function logError(msg){
-    let err = document.createElement('li');
-    let errMsg = document.createTextNode(msg);
-    err.appendChild(errMsg);
-    errorList.appendChild(err);
+  setTotalDebits(debits);
 }
 
-function isErrors(){
-    return errorList.hasChildNodes();
+function addCredits(val) {
+  let credits = getTotalCredits();
+  credits += val;
+  if (credits < 0) {
+    credits = 0;
+  }
+  setTotalCredits(credits);
+}
+
+/* 
+   I'm using firstChild to get around using
+   textContent/innerHTML/innerText 
+*/
+function getTotalDebits() {
+  const debits = totalDebits.firstChild.nodeValue;
+  return Number(cleanCashString(debits));
+}
+
+function setTotalDebits(val) {
+  totalDebits.firstChild.nodeValue = "$" + Number(val).toFixed(2);
+}
+
+function getTotalCredits() {
+  const credits = totalCredits.firstChild.nodeValue;
+  return Number(cleanCashString(credits));
+}
+
+function setTotalCredits(val) {
+  totalCredits.firstChild.nodeValue = "$" + Number(val).toFixed(2);
+}
+
+function buildTrashIcon() {
+  const icon = document.createElement("i");
+  icon.classList.add("delete", "fa", "fa-trash-o");
+  return icon;
+}
+
+function removeTableRow(event) {
+  const { parentNode: row } = event.target;
+  const cashElt = row.children[2];
+  const cashVal = cleanCashString(cashElt.firstChild.nodeValue);
+
+  const isDebit = row.classList.contains("debit");
+  if (isDebit) {
+    addDebits(-cashVal);
+  } else {
+    addCredits(-cashVal);
+  }
+
+  row.parentNode.removeChild(row);
+}
+
+function buildErrorList() {
+  const errList = document.createElement("ul");
+  errList.classList.add("error-list");
+  errorField.appendChild(errList);
+
+  return errList;
+}
+
+function logError(msg) {
+  let err = document.createElement("li");
+  let errMsg = document.createTextNode(msg);
+  err.appendChild(errMsg);
+  errorList.appendChild(err);
+}
+
+function isErrorFree() {
+  return !errorList.hasChildNodes();
 }
 
 function clearErrors() {
-    // While the error list has children, remove them.
-    while (errorList.firstChild){
-        errorList.removeChild(errorList.firstChild);
-    }
+  // While the error list has children, remove them.
+  while (errorList.firstChild) {
+    errorList.removeChild(errorList.firstChild);
+  }
 }
 
 function isEmptyOrWhiteSpace(str) {
-    return !str || !str.trim();
+  return !str || !str.trim();
+}
+
+/* Remove the "$" character from our cash values */
+function cleanCashString(str) {
+  return str.replace("$", "");
 }
