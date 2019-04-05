@@ -1,4 +1,9 @@
-// Enter JavaScript for the exercise here...
+/*
+ * CPSC 1520
+ * Assignment 3
+ * 
+ * David Bergeron
+ */
 const theForm = document.querySelector(".frm-transactions");
 
 const totalDebits = document.querySelector(".debits");
@@ -11,15 +16,15 @@ const errorList = buildErrorList();
 
 // Make the page refresh every two minutes.
 const timerDuration = 120000;
-setTimeout(() => {
-  alert("Your page is about to reload!");
-  window.location.reload();
-}, timerDuration);
+let refreshTimer = null;
+startRefreshTimer();
 
 theForm.addEventListener("submit", event => {
   // Stop the form from reloading on submit.
   event.preventDefault();
 
+  // Reset our page reload timer.
+  resetRefreshTimer();
   //Clear Error List (to prepare for new ones!)
   clearErrors();
 
@@ -186,6 +191,18 @@ function clearErrors() {
   while (errorList.firstChild) {
     errorList.removeChild(errorList.firstChild);
   }
+}
+
+function startRefreshTimer(){
+  refreshTimer = setTimeout(() => {
+    alert("Your page is about to reload!");
+    window.location.reload();
+  }, timerDuration);
+}
+
+function resetRefreshTimer(){
+  clearTimeout(refreshTimer);
+  startRefreshTimer();
 }
 
 function isEmptyOrWhiteSpace(str) {
