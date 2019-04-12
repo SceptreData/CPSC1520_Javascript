@@ -115,6 +115,8 @@ function getCashValue() {
   const cash = theForm.elements.currency;
   if (cash.value < 0) {
     logError("Cash must be a positive number.");
+  } else if (cash.value == 0){
+    logError("Cash value cannot be Zero.");
   }
 
   return Number(cash.value).toFixed(2);
@@ -194,6 +196,10 @@ function clearErrors() {
 }
 
 function startRefreshTimer(){
+  if (refreshTimer === null){
+    document.onmousemove = resetRefreshTimer;
+    document.onkeydown = resetRefreshTimer;
+  }
   refreshTimer = setTimeout(() => {
     alert("Your page is about to reload!");
     window.location.reload();
