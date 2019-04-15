@@ -2,5 +2,8 @@
     "id": 4,
     "firstName": "Sally",
     "lastName": "Anne",
-    "avatar": "sally.jpg"
+    "avatar": "sally.jpg",
+    "hometown": "Albuquerque, New Mexico",
+    "email": "weird_al_fan@hotbot.com",
+    "bio": "Lorem ipsum dolor amet beard ugh 90's, street art raw denim +1 PBR&B truffaut kinfolk tumblr succulents poutine copper mug pork belly. Air plant swag retro art party, post-ironic raw denim chambray XOXO tumblr subway tile fam organic you probably haven't heard of them. Salvia shabby chic cronut direct trade, keytar street art blue bottle biodiesel scenester authentic knausgaard flexitarian selfies. DIY freegan synth single-origin coffee, activated charcoal tote bag hella. Farm-to-table twee leggings disrupt tbh, polaroid normcore pok pok typewriter photo booth coloring book. Celiac pitchfork before they sold out single-origin coffee kombucha williamsburg drinking vinegar intelligentsia blog."
 }

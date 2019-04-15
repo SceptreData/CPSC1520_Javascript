@@ -2,5 +2,8 @@
     "id": 1,
     "firstName": "Jane",
     "lastName": "Doe",
-    "avatar": "jane_doe.jpg"
+    "avatar": "jane_doe.jpg",
+    "hometown": "Casablanca",
+    "email": "plain_jane@gmail.com",
+    "bio": "Lorem ipsum dolor amet salvia synth viral schlitz, +1 yuccie hammock blog fixie activated charcoal mustache aesthetic cardigan meditation. DIY hell of la croix synth godard hexagon four dollar toast 90's four loko fam portland kitsch vaporware messenger bag cronut. Woke umami af banjo, raw denim wayfarers whatever aesthetic fam. Cray copper mug art party, 90's austin heirloom street art authentic cold-pressed."
 }

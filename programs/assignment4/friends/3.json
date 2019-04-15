@@ -2,5 +2,9 @@
     "id": 3,
     "firstName": "Clark",
     "lastName": "Kent",
-    "avatar": "supes.jpg"
+    "avatar": "supes.jpg",
+    "hometown": "New York, New York",
+    "email": "no-im-not-superman@seriously.com",
+    "bio": "Hello, hello, anybody home? Think, McFly, think. I gotta have time to get them re-typed. Do you realize what would happen if I hand in my reports in your handwriting. I'll get fired. You wouldn't want that to happen would you? Would you? Safe now, everything's let lined. Don't you lose those tapes now, we'll need a record. Wup, wup, I almost forgot my luggage. Who knows if they've got cotton underwear in the future. I'm allergic to all synthetics. Excuse me. Lorraine, are you up there? C'mon, Mom, make it fast, I'll miss my bus. Hey see you tonight, Pop. Woo, time to change that oil."
+
 }
