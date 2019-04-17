@@ -2,56 +2,85 @@
 const friendsPath = "friends/";
 const friendsFile = "friends.json";
 
-const menu = document.querySelector('.pure-menu-list');
-const content = document.querySelector('.content');
+const menu = document.querySelector(".pure-menu");
+const content = document.querySelector(".content");
 
-buildFriendsList();
-loadFriend(2);
+let currentPage = "Home";
 
-menu.addEventListener('click', event => {
-    event.preventDefault();
-    const activeLink = event.target;
-    if (!activeLink.classList.contains('pure-menu-selected')){
-        activeLink.classList.add('pure-menu-selected');
-    }
+menu.addEventListener("click", event => {
+  event.preventDefault();
+  const { parentNode: target } = event.target;
+
+  if (isHomePage(target)) {
+    loadPage("Home");
+  } else if (target.classList.contains("friends")) {
+    loadPage("Friends");
+  }
 });
 
-function clearActiveLink() {
-    for (const item of menu.children){
-        item.classList.remove('pure-menu-selected');
-    }
-}
-
-function buildFriendsList() {
-    const friendList = document.createElement('ul');
-    content.appendChild(friendList);
-    populateFriendList(friendList);
-}
-
-
-function populateFriendList(list){
-    fetch(friendsPath + friendsFile)
-    .then(response => response.json())
-    .then(friends => {
-        for (const friend of friends) {
-            let elt = document.createElement('li');
-            let anchor = document.createElement('a');
-            anchor.href = "#";
-            anchor.setAttribute("data-friend-id", friend.id);
-            anchor.innerText = `${friend.firstName} ${friend.lastName}`;
-            elt.appendChild(anchor);
-            list.appendChild(elt);
-            console.log(friend);
-        }
-    })
-}
-function loadFriend(id){
+function loadPage(dest) {
+  if (currentPage !== dest) {
     clearContent();
-    fetch(friendsPath + `${id}.json`)
+
+    if (dest === "Friends") {
+      let list = buildFriendList();
+      populateFriendList(list);
+    }
+
+    setCurrentPage(dest);
+  }
+}
+
+function clearActiveLink() {
+  for (const item of menu.children) {
+    item.classList.remove("pure-menu-selected");
+  }
+}
+
+function buildFriendList() {
+  const friendList = document.createElement("ul");
+  content.appendChild(friendList);
+  return friendList;
+}
+
+function populateFriendList(list) {
+  fetch(friendsPath + friendsFile)
     .then(response => response.json())
-    .then(friend => {
-        const {firstName, lastName, avatar, email, bio, hometown} = friend;
-        content.innerHTML = `
+    .then(friends => buildFriendLinks(list, friends)); //buildFriendList(friends));
+}
+
+function loadFriend(event) {
+  event.preventDefault();
+  clearContent();
+
+  let id = event.target.getAttribute("data-friend-id");
+
+  fetch(friendsPath + `${id}.json`)
+    .then(response => response.json())
+    .then(friend => buildProfilePage(friend));
+}
+
+function buildFriendLinks(list, friends) {
+  console.log(friends);
+  for (const friend of friends) {
+    let elt = document.createElement("li");
+
+    let anchor = document.createElement("a");
+    anchor.href = "#";
+    anchor.setAttribute("data-friend-id", friend.id);
+    anchor.innerText = `${friend.firstName} ${friend.lastName}`;
+
+    anchor.addEventListener("click", loadFriend);
+
+    elt.appendChild(anchor);
+    list.appendChild(elt);
+  }
+}
+function buildProfilePage(friend) {
+  const { firstName, lastName, avatar, email, bio, hometown } = friend;
+  setCurrentPage(`${firstName} ${lastName}'s Profile`);
+
+  content.innerHTML = `
             <div class="friend">
                 <div class="identity">
                     <img src="img/${avatar}" class="photo" />
@@ -66,9 +95,20 @@ function loadFriend(id){
                 </p>
             </div>
         `;
-    })
 }
 
-function clearContent(){
-    content.innerHTML = "";
+function setCurrentPage(dest) {
+  let title = document.querySelector("title");
+  title.innerHTML = dest;
+  currentPage = dest;
+}
+
+function isHomePage(target) {
+  return (
+    target.classList.contains("home") ||
+    target.children[0].classList.contains("pure-menu-heading")
+  );
+}
+function clearContent() {
+  content.innerHTML = "";
 }
