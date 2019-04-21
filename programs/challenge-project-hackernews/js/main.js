@@ -26,7 +26,7 @@ let hackerNewsStory = 19617578;
 //   buildStory(story);
 // });
 
-loadStories(hackerNewsStory, 10000);
+loadStories(hackerNewsStory, 50);
 
 function loadStories(startId, num) {
   for (let i = 0; i < num; i++) {

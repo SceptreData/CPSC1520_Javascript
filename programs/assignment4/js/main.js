@@ -1,4 +1,9 @@
-// Your code here...
+/*
+ * CPSC1520 Javascript Assignment 4
+ *
+ * David Bergeron
+ */
+
 const friendsPath = "friends/";
 const friendsFile = "friends.json";
 
@@ -9,16 +14,20 @@ let currentPage = "Home";
 
 menu.addEventListener("click", event => {
   event.preventDefault();
-  const { parentNode: target } = event.target;
-
-  if (isHomePage(target)) {
-    loadPage("Home");
-  } else if (target.classList.contains("friends")) {
-    loadPage("Friends");
-  }
+  const { parentNode: destination } = event.target;
+  goTo(destination);
 });
 
+function goTo(dest) {
+  if (isHomePage(dest)) {
+    loadPage("Home");
+  } else if (isFriendsPage(dest)) {
+    loadPage("Friends");
+  }
+}
+
 function loadPage(dest) {
+  // If we aren't already at our destination, load the page
   if (currentPage !== dest) {
     clearContent();
 
@@ -31,15 +40,21 @@ function loadPage(dest) {
   }
 }
 
-function clearActiveLink() {
-  for (const item of menu.children) {
-    item.classList.remove("pure-menu-selected");
-  }
-}
-
 function buildFriendList() {
+  const listContainer = document.createElement("div");
+  listContainer.classList.add("pure-menu", "custom-restricted-width");
+
+  const heading = document.createElement("span");
+  heading.classList.add("pure-menu-heading");
+  heading.innerText = "Friends";
+
   const friendList = document.createElement("ul");
-  content.appendChild(friendList);
+  friendList.classList.add("pure-menu-list");
+
+  listContainer.appendChild(heading);
+  listContainer.appendChild(friendList);
+
+  content.appendChild(listContainer);
   return friendList;
 }
 
@@ -49,33 +64,51 @@ function populateFriendList(list) {
     .then(friends => buildFriendLinks(list, friends)); //buildFriendList(friends));
 }
 
+function buildFriendLinks(list, friends) {
+  for (const friend of friends) {
+    // Create List element
+    let elt = document.createElement("li");
+    elt.classList.add("pure-menu-item");
+
+    // Create Anchor element, attach it to <li> item.
+    let anchor = buildFriendAnchor(friend);
+    elt.appendChild(anchor);
+
+    // Add our <li> elt to the list.
+    list.appendChild(elt);
+  }
+}
+
+function buildFriendAnchor(friend) {
+  // Create our anchor element
+  let anchor = document.createElement("a");
+
+  // Populate the information
+  anchor.href = "#";
+  anchor.classList.add("pure-menu-link");
+  anchor.setAttribute("data-id", friend.id);
+  anchor.innerText = `${friend.firstName} ${friend.lastName}`;
+
+  // Add the click event
+  anchor.addEventListener("click", loadFriend);
+
+  return anchor;
+}
+
 function loadFriend(event) {
   event.preventDefault();
+  // Clear the page so we can build our profile page.
   clearContent();
 
-  let id = event.target.getAttribute("data-friend-id");
+  // Figure out which friend we should load.
+  let id = event.target.getAttribute("data-id");
 
+  //Fetch the friend from the appropriate json file.
   fetch(friendsPath + `${id}.json`)
     .then(response => response.json())
     .then(friend => buildProfilePage(friend));
 }
 
-function buildFriendLinks(list, friends) {
-  console.log(friends);
-  for (const friend of friends) {
-    let elt = document.createElement("li");
-
-    let anchor = document.createElement("a");
-    anchor.href = "#";
-    anchor.setAttribute("data-friend-id", friend.id);
-    anchor.innerText = `${friend.firstName} ${friend.lastName}`;
-
-    anchor.addEventListener("click", loadFriend);
-
-    elt.appendChild(anchor);
-    list.appendChild(elt);
-  }
-}
 function buildProfilePage(friend) {
   const { firstName, lastName, avatar, email, bio, hometown } = friend;
   setCurrentPage(`${firstName} ${lastName}'s Profile`);
@@ -103,12 +136,23 @@ function setCurrentPage(dest) {
   currentPage = dest;
 }
 
-function isHomePage(target) {
+function clearActiveLink() {
+  for (const item of menu.children) {
+    item.classList.remove("pure-menu-selected");
+  }
+}
+
+function isHomePage(dest) {
   return (
-    target.classList.contains("home") ||
-    target.children[0].classList.contains("pure-menu-heading")
+    dest.classList.contains("home") ||
+    dest.children[0].classList.contains("pure-menu-heading")
   );
 }
+
+function isFriendsPage(dest) {
+  return dest.classList.contains("friends");
+}
+
 function clearContent() {
   content.innerHTML = "";
 }
