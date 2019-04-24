@@ -19,11 +19,17 @@ menu.addEventListener("click", event => {
 });
 
 function goTo(dest) {
+  setActiveLink(dest);
   if (isHomePage(dest)) {
     loadPage("Home");
   } else if (isFriendsPage(dest)) {
     loadPage("Friends");
   }
+}
+
+function setActiveLink(dest) {
+  clearActiveLink();
+  dest.classList.add("pure-menu-selected");
 }
 
 function loadPage(dest) {
@@ -134,11 +140,14 @@ function setCurrentPage(dest) {
   let title = document.querySelector("title");
   title.innerHTML = dest;
   currentPage = dest;
+  // console.log(dest);
 }
 
 function clearActiveLink() {
-  for (const item of menu.children) {
-    item.classList.remove("pure-menu-selected");
+  const links = menu.children[1];
+  for (const item of links.children) {
+    if (item.classList.contains("pure-menu-selected"))
+      item.classList.remove("pure-menu-selected");
   }
 }
 
